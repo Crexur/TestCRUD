@@ -15,7 +15,7 @@ import java.io.*;
  *
  * @author user
  */
-public class productThings extends javax.swing.JFrame { //TESTING A COMMENT CHANGE
+public class productThings extends javax.swing.JFrame { //IAM SO DUMB
 
     /**
      * Creates new form productThings
