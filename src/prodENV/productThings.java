@@ -4,7 +4,7 @@
  */
 package prodENV;
 import java.sql.*;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -69,14 +69,16 @@ public class productThings extends javax.swing.JFrame { //IAM SO DUMB
             DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
             df.setRowCount(0);
             while(rs.next()){
-                Vector v2 = new Vector();
+                ArrayList<String> v2 = new ArrayList<>();
                 for(int a=1 ; a<=q; a++){
                     v2.add(rs.getString("id"));
                     v2.add(rs.getString("pname"));
                     v2.add(rs.getString("price"));
                     v2.add(rs.getString("qty"));
                 }
-                df.addRow(v2);
+                
+                Object[] rowData = v2.toArray();
+                df.addRow(rowData);
                 
             }
         } catch (SQLException ex) {
