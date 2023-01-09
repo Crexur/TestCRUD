@@ -4,6 +4,7 @@ package prodENV;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -474,15 +475,14 @@ byte[] pimage = null;
                                 .addGap(0, 0, 0)
                                 .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(labelview2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jButton8)
-                        .addGap(48, 48, 48))))
+                        .addGap(46, 46, 46))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,21 +493,21 @@ byte[] pimage = null;
                         .addComponent(btnExport)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(98, 98, 98))))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8)
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton8)
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel5)
+                                .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(3, 3, 3)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, 0)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(98, 98, 98)))))
         );
 
         javax.swing.GroupLayout pnlCCenterLayout = new javax.swing.GroupLayout(pnlCCenter);
@@ -768,14 +768,24 @@ byte[] pimage = null;
         try {
             // TODO add your handling code here:
             String pid = txtPid.getSelectedItem().toString();
+            
             pst = con.prepareStatement("select * from product_tbl where id=?");
             pst.setString(1, pid);
             rs = pst.executeQuery();
+            
 
             if(rs.next() == true){
                 txtPname.setText(rs.getString(2));
                 txtPrice.setText(rs.getString(3));
                 txtQty.setText(rs.getString(4));
+                if (rs.getBytes("Preview") == null || rs.getBytes("Preview").length == 0){
+                    JOptionPane.showMessageDialog(this, "No image found!");
+                }else{
+                    byte[] imageBytes = rs.getBytes("Preview");
+                    Image image = Toolkit.getDefaultToolkit().createImage(imageBytes);
+                    Image img = image.getScaledInstance(115, 115, Image.SCALE_SMOOTH);
+                    labelview2.setIcon(new ImageIcon(img));
+                }
                 Fetch();
 
             }else{
@@ -808,20 +818,55 @@ byte[] pimage = null;
     }//GEN-LAST:event_txtPidActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        int i = jTable1.getSelectedRow();
-        if (jTable1.getColumnCount() > 4)
-        {
-        ImageIcon image1 = (ImageIcon)jTable1.getValueAt(i, 4);
-        Image image2 = image1.getImage().getScaledInstance(labelview2.getWidth(), labelview2.getHeight()
-                 , Image.SCALE_SMOOTH);
-        ImageIcon image3 = new ImageIcon(image2);
-        labelview2.setIcon(image3);
-        }
-        else{
-            System.out.println("No Image");
-        }
+    int row = jTable1.getSelectedRow();
+    int column = jTable1.getSelectedColumn();
+    
+    Object value = jTable1.getValueAt(row, column);
+    
+    Object value1 = jTable1.getValueAt(row, 0);
+    String pid = value1.toString();
+    
+    Object value2 = jTable1.getValueAt(row, 1);
+    String name = value2.toString();
+    
+    Object value3 = jTable1.getValueAt(row, 2);
+    String price = value3.toString();
+    
+    Object value4 = jTable1.getValueAt(row, 3);
+    String qty = value4.toString(); 
+    
+    try {
+        pst = con.prepareStatement("select * from product_tbl where id=? and pname=? and price=? and qty=? ");
+        pst.setString(1, pid);
+        pst.setString(2, name);
+        pst.setString(3, price);
+        pst.setString(4, qty);
+        
+        
+        rs = pst.executeQuery();
+        
+        if (rs.next()) {
+        // Retrieve the data you want to display
+        String nname = rs.getString("pname");
+        String pprice = rs.getString("price");
+        String qqty = rs.getString("qty");
+        byte[] imageBytes = rs.getBytes("Preview");
+
+        // Display the data in the appropriate components
+        txtPname.setText(nname);
+        txtPrice.setText(pprice);
+        txtQty.setText(qqty);
+        Image image = Toolkit.getDefaultToolkit().createImage(imageBytes);
+        Image img = image.getScaledInstance(115, 115, Image.SCALE_SMOOTH);
+        labelview2.setIcon(new ImageIcon(img));
+    }
+    } catch (SQLException ex) {
+        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
     }//GEN-LAST:event_jTable1MouseClicked
 
+    
     
     /**
      * @param args the command line arguments
