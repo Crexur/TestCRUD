@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -23,13 +25,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -42,21 +47,19 @@ import javax.swing.table.DefaultTableModel;
 public class Home extends javax.swing.JFrame {
 File f = null;
 String path = null;
-private ImageIcon format = null;
-String fname= null;
-int s = 0;
-byte[] pimage = null;
-
-
+int xMouse;
+int yMouse;
+private JFrame frame;
     /**
      * Creates new form Home
      */
     public Home() {
+        frame = this;
         initComponents();
         Connect();
         LoadProductNo();
         Fetch();
-        JButton[] btns = {jButton1, jButton2, jButton3, jButton4, jButton5, jButton6};
+        JButton[] btns = {jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7};
         for (JButton btn : btns) {
             btn.setBackground(new Color(21, 25, 28));
             btn.setUI(new BasicButtonUI());
@@ -197,10 +200,11 @@ byte[] pimage = null;
         jLabel3 = new javax.swing.JLabel();
         txtPname = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
-        ClearAll = new javax.swing.JButton();
+        btnClearAll = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         labelview1 = new javax.swing.JLabel();
         btnBrowse = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -208,16 +212,32 @@ byte[] pimage = null;
         txtPid = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        btnClearImage = new javax.swing.JButton();
         labelview2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton7 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1100, 550));
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1100, 545));
         setResizable(false);
 
-        pnlCBottom.setBackground(new java.awt.Color(204, 0, 204));
+        pnlCBottom.setBackground(new java.awt.Color(179, 55, 113));
         pnlCBottom.setPreferredSize(new java.awt.Dimension(0, 30));
+        pnlCBottom.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                pnlCBottomMouseDragged(evt);
+            }
+        });
+        pnlCBottom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlCBottomMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlCBottomMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlCBottomLayout = new javax.swing.GroupLayout(pnlCBottom);
         pnlCBottom.setLayout(pnlCBottomLayout);
@@ -274,7 +294,7 @@ byte[] pimage = null;
         jButton5.setPreferredSize(new java.awt.Dimension(55, 20));
         pnlSlide.add(jButton5);
 
-        pnlCenter.setBackground(new java.awt.Color(34, 40, 44));
+        pnlCenter.setBackground(new java.awt.Color(19, 40, 44));
         pnlCenter.setPreferredSize(new java.awt.Dimension(847, 590));
 
         jPanel3.setBackground(new java.awt.Color(19, 40, 44));
@@ -299,6 +319,8 @@ byte[] pimage = null;
             }
         });
 
+        btnAdd.setBackground(new java.awt.Color(51, 51, 51));
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
         btnAdd.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\adding.png")); // NOI18N
         btnAdd.setText("Add");
         btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -310,16 +332,22 @@ byte[] pimage = null;
             }
         });
 
-        ClearAll.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\eraser.png")); // NOI18N
-        ClearAll.setText("Clear All");
-        ClearAll.addActionListener(new java.awt.event.ActionListener() {
+        btnClearAll.setBackground(new java.awt.Color(51, 51, 51));
+        btnClearAll.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearAll.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\eraser.png")); // NOI18N
+        btnClearAll.setText("Clear All");
+        btnClearAll.setIconTextGap(10);
+        btnClearAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ClearAllActionPerformed(evt);
+                btnClearAllActionPerformed(evt);
             }
         });
 
+        btnUpdate.setBackground(new java.awt.Color(51, 51, 51));
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\refresh.png")); // NOI18N
         btnUpdate.setText("Update");
+        btnUpdate.setIconTextGap(10);
         btnUpdate.setPreferredSize(new java.awt.Dimension(58, 24));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -329,10 +357,25 @@ byte[] pimage = null;
 
         labelview1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 153, 0)));
 
+        btnBrowse.setBackground(new java.awt.Color(51, 51, 51));
+        btnBrowse.setForeground(new java.awt.Color(255, 255, 255));
         btnBrowse.setText("Select an Image");
+        btnBrowse.setIconTextGap(10);
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBrowseActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(51, 51, 51));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\delete.png")); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setIconTextGap(10);
+        btnDelete.setPreferredSize(new java.awt.Dimension(50, 24));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -344,30 +387,35 @@ byte[] pimage = null;
                 .addGap(22, 22, 22)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPname, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtPname, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(labelview1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(82, 82, 82))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnBrowse)
-                .addGap(99, 99, 99))
+                .addGap(105, 105, 105))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,8 +435,9 @@ byte[] pimage = null;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
-                    .addComponent(ClearAll)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnClearAll)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(281, 281, 281))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -402,8 +451,9 @@ byte[] pimage = null;
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(255, 255, 255)), "Record View", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel4.setPreferredSize(new java.awt.Dimension(900, 265));
 
+        jTable1.setBackground(new java.awt.Color(0, 0, 0));
         jTable1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jTable1.setForeground(new java.awt.Color(34, 40, 44));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -426,6 +476,8 @@ byte[] pimage = null;
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setSelectionBackground(new java.awt.Color(102, 102, 102));
+        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -455,8 +507,11 @@ byte[] pimage = null;
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Product ID:");
 
+        btnSearch.setBackground(new java.awt.Color(51, 51, 51));
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
         btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\search.png")); // NOI18N
         btnSearch.setText("Search");
+        btnSearch.setIconTextGap(10);
         btnSearch.setPreferredSize(new java.awt.Dimension(50, 24));
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -464,16 +519,14 @@ byte[] pimage = null;
             }
         });
 
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\netbeans icon import\\delete.png")); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.setPreferredSize(new java.awt.Dimension(50, 24));
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnClearImage.setBackground(new java.awt.Color(51, 51, 51));
+        btnClearImage.setForeground(new java.awt.Color(255, 255, 255));
+        btnClearImage.setText("Clear image");
+        btnClearImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
+                btnClearImageActionPerformed(evt);
             }
         });
-
-        jButton8.setText("Clear image");
 
         labelview2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 102, 0)));
 
@@ -483,36 +536,31 @@ byte[] pimage = null;
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel5))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 70, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel5)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68))
+                                .addGap(17, 17, 17)
+                                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton8)
-                        .addGap(97, 97, 97))))
+                        .addComponent(btnClearImage)
+                        .addGap(106, 106, 106))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -522,7 +570,7 @@ byte[] pimage = null;
                         .addGap(21, 21, 21)
                         .addComponent(labelview2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8))
+                        .addComponent(btnClearImage))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(btnExport)
@@ -534,26 +582,67 @@ byte[] pimage = null;
                             .addComponent(txtPid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlCenterLayout = new javax.swing.GroupLayout(pnlCenter);
         pnlCenter.setLayout(pnlCenterLayout);
         pnlCenterLayout.setHorizontalGroup(
             pnlCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1025, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlCenterLayout.setVerticalGroup(
             pnlCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCenterLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62))
+        );
+
+        jPanel2.setBackground(new java.awt.Color(21, 25, 28));
+        jPanel2.setPreferredSize(new java.awt.Dimension(59, 52));
+
+        jButton7.setBackground(new java.awt.Color(255, 255, 255));
+        jButton7.setFont(new java.awt.Font("Doctor Glitch", 0, 12)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(153, 0, 153));
+        jButton7.setText("Exit");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton7)
+                .addGap(24, 24, 24))
+        );
+
+        jPanel5.setBackground(new java.awt.Color(109, 33, 79));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 59, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -562,23 +651,29 @@ byte[] pimage = null;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pnlSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 1025, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 10, Short.MAX_VALUE))
-                    .addComponent(pnlCBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(pnlSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlCBottom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
+                    .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 1041, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlCBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(pnlCBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnlSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+                    .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
@@ -636,7 +731,7 @@ byte[] pimage = null;
                 }else{
                     byte[] imageBytes = rs.getBytes("Preview");
                     Image image = Toolkit.getDefaultToolkit().createImage(imageBytes);
-                    Image img = image.getScaledInstance(115, 115, Image.SCALE_SMOOTH);
+                    Image img = image.getScaledInstance(155, 155, Image.SCALE_SMOOTH);
                     labelview2.setIcon(new ImageIcon(img));
                 }
                 Fetch();
@@ -726,15 +821,9 @@ byte[] pimage = null;
 
             if (rs.next()) {
                 // Retrieve the data you want to display
-                String nname = rs.getString("pname");
-                String pprice = rs.getString("price");
-                String qqty = rs.getString("qty");
                 byte[] imageBytes = rs.getBytes("Preview");
 
                 // Display the data in the appropriate components
-                txtPname.setText(nname);
-                txtPrice.setText(pprice);
-                txtQty.setText(qqty);
                 Image image = Toolkit.getDefaultToolkit().createImage(imageBytes);
                 Image img = image.getScaledInstance(155, 155, Image.SCALE_SMOOTH);
                 labelview2.setIcon(new ImageIcon(img));
@@ -745,7 +834,23 @@ byte[] pimage = null;
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        Preferences prefs = Preferences.userNodeForPackage(Home.class);
         JFileChooser fileChooser = new JFileChooser();
+        
+        fileChooser.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
+            prefs.put("lastOpenDirectory", fileChooser.getCurrentDirectory().toString());
+                }
+            }
+        });
+        
+        String lastOpenDirectory = prefs.get("lastOpenDirectory", null);
+        if (lastOpenDirectory != null) {
+        fileChooser.setCurrentDirectory(new File(lastOpenDirectory));
+            }
+            
+        
         FileNameExtensionFilter fnwf = new FileNameExtensionFilter("PNG JPG AND JPEG", "png","jpeg","jpg");
         fileChooser.addChoosableFileFilter(fnwf);
         int load = fileChooser.showOpenDialog(null);
@@ -816,11 +921,11 @@ byte[] pimage = null;
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void ClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearAllActionPerformed
+    private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
         txtPname.setText("");
         txtPrice.setText("");
         txtQty.setText("");
-    }//GEN-LAST:event_ClearAllActionPerformed
+    }//GEN-LAST:event_btnClearAllActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         System.out.println("Image path - "+ path);
@@ -871,6 +976,33 @@ byte[] pimage = null;
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPnameActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void btnClearImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearImageActionPerformed
+        labelview1.setIcon(null);
+        labelview2.setIcon(null);
+    }//GEN-LAST:event_btnClearImageActionPerformed
+
+    private void pnlCBottomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlCBottomMouseClicked
+        
+    }//GEN-LAST:event_pnlCBottomMouseClicked
+
+    private void pnlCBottomMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlCBottomMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        frame.setLocation(x - xMouse, y - yMouse);
+    }//GEN-LAST:event_pnlCBottomMouseDragged
+
+    private void pnlCBottomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlCBottomMousePressed
+        xMouse = evt.getX();
+        yMouse = evt.getY();
+
+        
+    }//GEN-LAST:event_pnlCBottomMousePressed
+
     
     
     /**
@@ -909,9 +1041,10 @@ byte[] pimage = null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ClearAll;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBrowse;
+    private javax.swing.JButton btnClearAll;
+    private javax.swing.JButton btnClearImage;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExport;
     private javax.swing.JButton btnSearch;
@@ -922,14 +1055,16 @@ byte[] pimage = null;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel labelview1;
