@@ -258,13 +258,11 @@ private JFrame frame;
         jPanel1.setPreferredSize(new java.awt.Dimension(40, 100));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 25));
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/windows.png"))); // NOI18N
         jButton6.setPreferredSize(new java.awt.Dimension(30, 30));
         jPanel1.add(jButton6);
 
         pnlSlide.add(jPanel1);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/home (1).png"))); // NOI18N
         jButton1.setPreferredSize(new java.awt.Dimension(55, 20));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,7 +271,6 @@ private JFrame frame;
         });
         pnlSlide.add(jButton1);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/hula-hoop.png"))); // NOI18N
         jButton2.setPreferredSize(new java.awt.Dimension(55, 20));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -282,15 +279,12 @@ private JFrame frame;
         });
         pnlSlide.add(jButton2);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/Document.png"))); // NOI18N
         jButton3.setPreferredSize(new java.awt.Dimension(55, 20));
         pnlSlide.add(jButton3);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/speedometer.png"))); // NOI18N
         jButton4.setPreferredSize(new java.awt.Dimension(55, 20));
         pnlSlide.add(jButton4);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/paragraph.png"))); // NOI18N
         jButton5.setPreferredSize(new java.awt.Dimension(55, 20));
         pnlSlide.add(jButton5);
 
@@ -321,7 +315,7 @@ private JFrame frame;
 
         btnAdd.setBackground(new java.awt.Color(51, 51, 51));
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/adding.png"))); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/adding1.png"))); // NOI18N
         btnAdd.setText("Add");
         btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         btnAdd.setIconTextGap(10);
@@ -334,7 +328,6 @@ private JFrame frame;
 
         btnClearAll.setBackground(new java.awt.Color(51, 51, 51));
         btnClearAll.setForeground(new java.awt.Color(255, 255, 255));
-        btnClearAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/eraser.png"))); // NOI18N
         btnClearAll.setText("Clear All");
         btnClearAll.setIconTextGap(10);
         btnClearAll.addActionListener(new java.awt.event.ActionListener() {
@@ -345,7 +338,6 @@ private JFrame frame;
 
         btnUpdate.setBackground(new java.awt.Color(51, 51, 51));
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/refresh.png"))); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.setIconTextGap(10);
         btnUpdate.setPreferredSize(new java.awt.Dimension(58, 24));
@@ -369,7 +361,6 @@ private JFrame frame;
 
         btnDelete.setBackground(new java.awt.Color(51, 51, 51));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/delete.png"))); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.setIconTextGap(10);
         btnDelete.setPreferredSize(new java.awt.Dimension(50, 24));
@@ -506,7 +497,6 @@ private JFrame frame;
 
         btnSearch.setBackground(new java.awt.Color(51, 51, 51));
         btnSearch.setForeground(new java.awt.Color(255, 255, 255));
-        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/prodENV/Icons/search.png"))); // NOI18N
         btnSearch.setText("Search");
         btnSearch.setIconTextGap(10);
         btnSearch.setPreferredSize(new java.awt.Dimension(50, 24));
