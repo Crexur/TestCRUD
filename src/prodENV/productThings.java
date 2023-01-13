@@ -144,7 +144,7 @@ public class productThings extends javax.swing.JFrame { //IAM SO DUMB
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Product name:");
 
-        txtPid.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtPid.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID 1", "ID 2", "ID 3", "ID 4" }));
         txtPid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPidActionPerformed(evt);
