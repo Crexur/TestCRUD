@@ -357,7 +357,7 @@ private JFrame frame;
 
         btnAdd.setBackground(new java.awt.Color(153, 153, 153));
         btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Documents\\NetBeansProjects\\TestCRUD\\src\\Images\\adding1.png")); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon("src/assets/diskette.png")); // NOI18N
         btnAdd.setText("Add");
         btnAdd.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btnAdd.setContentAreaFilled(false);
@@ -379,7 +379,7 @@ private JFrame frame;
 
         btnClearAll.setBackground(new java.awt.Color(51, 51, 51));
         btnClearAll.setForeground(new java.awt.Color(255, 255, 255));
-        btnClearAll.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\LocalGIT\\icons\\eraser.png")); // NOI18N
+        btnClearAll.setIcon(new javax.swing.ImageIcon("src/assets/eraser.png")); // NOI18N
         btnClearAll.setText("Clear All");
         btnClearAll.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btnClearAll.setContentAreaFilled(false);
@@ -393,7 +393,7 @@ private JFrame frame;
 
         btnUpdate.setBackground(new java.awt.Color(51, 51, 51));
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\LocalGIT\\icons\\refresh.png")); // NOI18N
+        btnUpdate.setIcon(new javax.swing.ImageIcon("src/prodENV/Icons/refresh.png")); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btnUpdate.setContentAreaFilled(false);
@@ -549,7 +549,7 @@ private JFrame frame;
 
         btnSearch.setBackground(new java.awt.Color(51, 51, 51));
         btnSearch.setForeground(new java.awt.Color(255, 255, 255));
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\LocalGIT\\icons\\search.png")); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon("src/prodENV/Icons/search.png")); // NOI18N
         btnSearch.setText("Search");
         btnSearch.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btnSearch.setContentAreaFilled(false);
@@ -576,7 +576,7 @@ private JFrame frame;
 
         btnDelete.setBackground(new java.awt.Color(51, 51, 51));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\user\\Desktop\\LocalGIT\\icons\\delete.png")); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("src/prodENV/Icons/delete.png")); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btnDelete.setContentAreaFilled(false);
